@@ -4,7 +4,7 @@ from database.schemas.user import User
 
 __all__ = ["create_user", "get_users", "delete_user", "update_user", "get_user", "create_regular_user", "get_user_by_login"]
 
-def create_user(db: Session, login: str, password: str, role_id: int, name: str | None = None):
+def create_user(db: Session, login: str, password: str, role_id: int):
     db_user = User(login=login, password=password, role_id=role_id)
     db.add(db_user)
     db.commit()
@@ -12,7 +12,7 @@ def create_user(db: Session, login: str, password: str, role_id: int, name: str 
     return db_user
 
 
-def create_regular_user(db: Session, login: str, password: str, name: str | None = None):
+def create_regular_user(db: Session, login: str, password: str):
     db_user = User(login=login, password=password, role_id=1)
     db.add(db_user)
     db.commit()

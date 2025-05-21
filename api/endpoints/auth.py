@@ -14,7 +14,7 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already registered")
 
     hashed_password = database.schemas.user.User().set_password(user.password)
-    db_user = crud.create_regular_user(db=db, login=user.login, password=hashed_password, name=user.name)
+    db_user = crud.create_regular_user(db=db, login=user.login, password=hashed_password)
     return db_user
 
 

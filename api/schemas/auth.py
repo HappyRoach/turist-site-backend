@@ -3,7 +3,6 @@ import typing
 
 class UserCreate(BaseModel):
     login: str
-    name: typing.Optional[str] = None
     password: str
 
     class Config:

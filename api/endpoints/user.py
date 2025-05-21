@@ -13,7 +13,7 @@ router = APIRouter()
 @router.post("/", response_model=UserCreate)
 def create_user(user: UserCreate, db: Session = Depends(get_db),
                 current_user: User = Depends(security.check_role(["superadmin"]))):
-    return crud.create_user(db=db, login=user.login, password=user.password, role_id=user.role_id, name=user.name)
+    return crud.create_user(db=db, login=user.login, password=user.password, role_id=user.role_id)
 
 @router.get("/", response_model=List[UserGet])
 def get_users(db: Session = Depends(get_db), 
