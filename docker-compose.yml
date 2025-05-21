@@ -1,0 +1,42 @@
+services:
+  backend:
+    build:
+      context: .
+    container_name: tursite_backend
+    ports:
+      - 9667:9667
+    environment:
+      - DATABASE_URL=postgresql://postgres:rt25pcx501@tursite-pg/postgres?client_encoding=UTF8
+      - SECRET_KEY=cKpBOnozxE5Be4Th4AAtWi0jTcIyw+SFt9pqVMTmrww=
+    depends_on:
+      tursite-pg:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  tursite-pg:
+    image: postgres:17.4
+    container_name: tursite-pg
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: rt25pcx501
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres && psql -U postgres -c 'SELECT 1'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
