@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 import enum
 
-from ..utils.database import Base
+from .. import Base
 
 class ActivityType(str, enum.Enum):
     ACTIVE = "active"

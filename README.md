@@ -12,25 +12,6 @@ Backend часть туристического веб-приложения, р�
 - JWT для аутентификации
 - Alembic для миграций
 
-## Структура проекта
-```
-turist-site-backend/
-├── api/                    # API endpoints и бизнес-логика
-│   ├── endpoints/         # API endpoints
-│   ├── crud/             # CRUD операции
-│   ├── schemas/          # Pydantic модели
-│   └── utils/            # Вспомогательные утилиты
-├── database/             # Работа с базой данных
-│   └── schemas/         # SQLAlchemy модели
-├── alembic/              # Миграции базы данных
-│   ├── versions/        # Файлы миграций
-│   └── env.py          # Конфигурация окружения для миграций
-├── main.py              # Точка входа приложения
-├── init_db.py           # Инициализация базы данных
-├── Dockerfile           # Конфигурация Docker
-└── docker-compose.yml   # Docker Compose конфигурация
-```
-
 ## Требования
 - Docker и Docker Compose
 - Python 3.12 (для локальной разработки)
