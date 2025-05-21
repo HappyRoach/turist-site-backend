@@ -89,8 +89,3 @@ class TouristDestinations:
         sorted_destinations = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
         
         return sorted_destinations[:3]
-
-
-if __name__ == "__main__":
-    quiz = TouristDestinations(activity="cultural", climate="cold", length="short", transport="plane", budget="high")
-    print(quiz.get_destinations())
