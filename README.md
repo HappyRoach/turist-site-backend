@@ -35,7 +35,7 @@ docker-compose up --build
 ### Локальная разработка
 1. Создайте виртуальное окружение:
 ```bash
-python -m venv venv
+python3 -m venv venv
 source venv/bin/activate  # для Linux/Mac
 venv\Scripts\activate     # для Windows
 ```
