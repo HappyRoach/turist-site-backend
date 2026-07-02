@@ -14,20 +14,9 @@ router = APIRouter()
 def create_tour(
     tour: TourCreate, 
     db: Session = Depends(get_db),
-    token: str = Query(..., description="JWT токен"),
+    current_user: User = Depends(security.check_role(["superadmin", "admin"])),
 ):
     """Создать новый тур (только для администраторов)"""
-    
-    user_payload = security.verify_token(token)
-    user = db.query(User).filter(User.id == user_payload.get("user_id")).first()
-    
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-    
-    
-    if user.role.name not in ["superadmin", "admin"]:
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    
     return crud.create_tour(
         db=db,
         name=tour.name,
@@ -64,20 +53,9 @@ def update_tour(
     tour_id: int, 
     tour: TourUpdate, 
     db: Session = Depends(get_db),
-    token: str = Query(..., description="JWT токен"),
+    current_user: User = Depends(security.check_role(["superadmin", "admin"])),
 ):
     """Обновить информацию о туре (только для администраторов)"""
-    
-    user_payload = security.verify_token(token)
-    user = db.query(User).filter(User.id == user_payload.get("user_id")).first()
-    
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-    
-    
-    if user.role.name not in ["superadmin", "admin"]:
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    
     update_data = tour.dict(exclude_unset=True)
     db_tour = crud.update_tour(db=db, tour_id=tour_id, **update_data)
     if db_tour is None:
@@ -88,20 +66,9 @@ def update_tour(
 def delete_tour(
     tour_id: int, 
     db: Session = Depends(get_db),
-    token: str = Query(..., description="JWT токен"),
+    current_user: User = Depends(security.check_role(["superadmin", "admin"])),
 ):
     """Удалить тур (только для администраторов)"""
-    
-    user_payload = security.verify_token(token)
-    user = db.query(User).filter(User.id == user_payload.get("user_id")).first()
-    
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
-    
-    
-    if user.role.name not in ["superadmin", "admin"]:
-        raise HTTPException(status_code=403, detail="Not enough permissions")
-    
     db_tour = crud.delete_tour(db, tour_id=tour_id)
     if db_tour is None:
         raise HTTPException(status_code=404, detail="Tour not found")

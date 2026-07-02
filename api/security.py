@@ -37,6 +37,27 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     return encoded_jwt
 
 
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Request, Query
+from typing import Optional
+
+security_scheme = HTTPBearer(auto_error=False)
+
+def get_token(
+    request: Request,
+    header_token: Optional[HTTPAuthorizationCredentials] = Depends(security_scheme),
+    query_token: Optional[str] = Query(None, alias="token")
+) -> str:
+    if header_token:
+        return header_token.credentials
+    if query_token:
+        return query_token
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Not authenticated",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
 def verify_token(token: str):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -49,12 +70,12 @@ def verify_token(token: str):
         )
 
 
-def get_current_user(token: str):
+def get_current_user(token: str = Depends(get_token)):
     payload = verify_token(token)
     return UserAuth(**payload)
 
 
-def get_current_user_with_role(token: str, db: Session = Depends(get_db)):
+def get_current_user_with_role(token: str = Depends(get_token), db: Session = Depends(get_db)):
     payload = verify_token(token)
     user = db.query(User).filter(User.id == payload.get("user_id")).first()
     if not user:

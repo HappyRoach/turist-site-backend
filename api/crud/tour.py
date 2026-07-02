@@ -3,7 +3,7 @@ from database.schemas.tour import Tour
 from typing import Optional, List
 
 def create_tour(db: Session, name: str, description: Optional[str], country: Optional[str],
-                city: Optional[str], duration: Optional[int], operator: str, 
+                city: Optional[str], duration: Optional[str], operator: str, 
                 price: Optional[float], image_url: Optional[str], external_url: str):
     db_tour = Tour(
         name=name,

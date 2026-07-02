@@ -6,7 +6,7 @@ class TourBase(BaseModel):
     description: Optional[str] = Field(None, description="Краткое описание")
     country: Optional[str] = Field(None, description="Страна")
     city: Optional[str] = Field(None, description="Город")
-    duration: Optional[int] = Field(None, description="Длительность в днях")
+    duration: Optional[str] = Field(None, description="Длительность")
     operator: str = Field(..., description="Туроператор: Золотой глобус или Фейерверк")
     price: Optional[float] = Field(None, description="Цена тура")
     image_url: Optional[str] = Field(None, description="URL изображения")
@@ -20,7 +20,7 @@ class TourUpdate(BaseModel):
     description: Optional[str] = None
     country: Optional[str] = None
     city: Optional[str] = None
-    duration: Optional[int] = None
+    duration: Optional[str] = None
     operator: Optional[str] = None
     price: Optional[float] = None
     image_url: Optional[str] = None

@@ -11,10 +11,10 @@ class Tour(Base):
     description = Column(Text)
     country = Column(String(100))
     city = Column(String(100))
-    duration = Column(Integer)  
+    duration = Column(String(100))  
     operator = Column(String(50), nullable=False) 
     price = Column(Float, nullable=True)
-    image_url = Column(String(500))
+    image_url = Column(Text)
     external_url = Column(String(500), nullable=False)  # ссылка на сайт туроператора
 
     def __repr__(self):

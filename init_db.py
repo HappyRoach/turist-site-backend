@@ -38,6 +38,43 @@ def init_superadmin(db: Session):
     except Exception as e:
         print(f"Ошибка при создании суперпользователя: {e}")
 
+from api import crud
+from database.schemas.direction import Direction
+from database.schemas.survey import SurveyQuestion
+from database.schemas.setting import Setting
+
+def init_directions(db: Session):
+    default_dirs = ['Развлекательные', 'По России', 'За границей', 'Приключения', 'Экскурсионные', 'Пляжные']
+    for name in default_dirs:
+        try:
+            existing = db.query(Direction).filter(Direction.name == name).first()
+            if not existing:
+                crud.create_direction(db, name=name)
+                print(f"Направление '{name}' создано")
+        except Exception as e:
+            print(f"Ошибка при создании направления '{name}': {e}")
+
+def init_survey(db: Session):
+    try:
+        existing = db.query(SurveyQuestion).first()
+        if not existing:
+            q = crud.create_question(db, title="Какой курортный район предпочитаете?")
+            crud.add_answer(db, question_id=q.id, text="Шумный и молодёжный, с клубами", criterion="Развлекательность", score=2)
+            crud.add_answer(db, question_id=q.id, text="Спокойный, семейный", criterion="Развлекательность", score=8)
+            crud.add_answer(db, question_id=q.id, text="Уединенный, элитный", criterion="Развлекательность", score=6)
+            print("Начальный опрос создан")
+    except Exception as e:
+        print(f"Ошибка при создании опроса: {e}")
+
+def init_settings(db: Session):
+    try:
+        existing = db.query(Setting).filter(Setting.key == 'admin_panel_title').first()
+        if not existing:
+            crud.save_setting(db, key='admin_panel_title', value='Тур Админ')
+            print("Настройка названия админки создана")
+    except Exception as e:
+        print(f"Ошибка при создании настроек: {e}")
+
 def init_database():
     """Основная функция инициализации базы данных"""
     db = Session()
@@ -45,6 +82,9 @@ def init_database():
         print("Начало инициализации базы данных...")
         init_roles(db)
         init_superadmin(db)
+        init_directions(db)
+        init_survey(db)
+        init_settings(db)
         print("Инициализация базы данных успешно завершена")
     except Exception as e:
         print(f"Критическая ошибка при инициализации базы данных: {e}")
