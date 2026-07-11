@@ -1,4 +1,5 @@
-from database import Session
+from database import Session, Base, engine
+import database.schemas
 from api.crud.role import create_role, get_role
 from api.crud.user import create_user, get_user_by_login
 from database.schemas.user import User
@@ -77,6 +78,8 @@ def init_settings(db: Session):
 
 def init_database():
     """Основная функция инициализации базы данных"""
+    print("Создание таблиц в базе данных...")
+    Base.metadata.create_all(bind=engine)
     db = Session()
     try:
         print("Начало инициализации базы данных...")
